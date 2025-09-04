@@ -9,6 +9,8 @@ const taskfinList = document.getElementById("taskfinList");
 const rulettoBtn = document.getElementById("rulettoBtn");
 const selecttask = document.getElementById("selecttask");
 let expNum = 0;
+let levelNum = 1;
+let nextExpNum = 100;
 
 
 let tasks = [];
@@ -43,8 +45,7 @@ addTaskBtn.addEventListener("click", function() {
     taskList.removeChild(li);
     taskfinList.appendChild(li);
     li.removeChild(bttn);
-    expNum = expNum + 10;
-    exp.textContent = expNum;
+    
     levelUp(expNum);
 
     
@@ -95,14 +96,25 @@ const exp_bar = document.getElementById("exp_bar");
 
 
 function levelUp(num){
-  if(num >= nextExp){
+  expNum = expNum + 10;
+    exp.textContent = expNum;
+  if(num === nextExpNum){
+
     exp.textContent = 0;
-    exp = exp - nextExp;
-    level = level + 1;
+    levelNum = levelNum + 1;
+    level.textContent = levelNum;
+    nextExpUP(nextExpNum);
+    Sound2()
   }
 }
 
-// function nextExpUP(num){
-//   nextExp.textContent = num;
-// }
+function nextExpUP(num){
+  num = num + 100;
+  nextExp.textContent = num;
+}
 
+const myAudio2 = document.getElementById("myAudio2");
+function Sound2() {
+  myAudio2.play();
+  //https://soundeffect-lab.info/sound/anime/こちらがMP３の引用元です。確認済み
+}
