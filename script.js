@@ -8,6 +8,7 @@ const taskList = document.getElementById("taskList");
 const taskfinList = document.getElementById("taskfinList");
 const rulettoBtn = document.getElementById("rulettoBtn");
 const selecttask = document.getElementById("selecttask");
+const character = document.getElementById("character");
 let expNum = 0;
 let levelNum = 1;
 let nextExpNum = 100;
@@ -45,10 +46,7 @@ addTaskBtn.addEventListener("click", function() {
     taskList.removeChild(li);
     taskfinList.appendChild(li);
     li.removeChild(bttn);
-    
     levelUp(expNum);
-
-    
     });
   
   
@@ -94,23 +92,35 @@ const nextExp = document.getElementById("nextExp");
 const exp_fill = document.getElementById("exp_fill");
 const exp_bar = document.getElementById("exp_bar");
 
-
+//レベルアップ
 function levelUp(num){
   expNum = expNum + 10;
     exp.textContent = expNum;
   if(num === nextExpNum){
-
     exp.textContent = 0;
+    expNum = 0;
     levelNum = levelNum + 1;
     level.textContent = levelNum;
     nextExpUP(nextExpNum);
     Sound2()
+    //下記画像リンクはどれも同じサイトからのものになります。フリー画像で確認済みです。
+    if(levelNum >= 50){
+      character.src= "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtzOSh5RtTHz515R23Yc7ROVvVaf91S5y5elKZYjnSAa0bGnfAUjs8Tqg_hQCx25m6iMCTb1eQyKJa_zacaS5z2CYM3ZxBW4wgIo_ISufy24nru8gtfbJSLbPcuWZt9bDBPT1hsk3GNXrU/s180-c/fantasy_dragon_wyvern.png";
+    }else if(levelNum >= 20){
+      character.src= "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgo-AaAJdj7q1XzCREPSpedoeZt6_Wb1fvlc9pSJMzfgazTFqrY2wQTVH22m1y5-AsDFRQKpbka7xe44yuvsp1k6yHh9_8AmsRy9sn7QQ6zfaNwQHHHA-BPD1VQ-Hq11RzpAxreTuSIyNe4/s180-c/animal_hagewashi_hagetaka.png";
+    }else if(levelNum >= 10){
+      character.src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhugpMvQYTwORyEPiv79itvDimBE-OuHSjbrU5BtnSRijly6_H0PfGEWNbWgKSenjBq8Y2IGNFUPs1bJ-Lba7dW_R2Avw8YbfuO3Y1QIz8UcMFXoWr-XvzHl2PxnpNbQlXvsn6oc7x4a89x/s180-c/eto_remake_tori.png";
+    }else if(levelNum >= 2){
+      character.src = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2C8RelIhXK1JMdJe3cgGAVdrShe-MXKcW3UV-8NyQmmpFQ4isibp212rK7ATvJq3KhAq28QmMnmOjxoyW1sKsXYe5BE_g6K7UP5vlRoEQvkzyW3vWIFDyj_LddBa90Qp_0y1cMk3h-kIn/s400/hiyoko_baby.png";
+    }else {
+      character.src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVE8g58at6gfhiVSxRustgHDG4hwQVh6JFEcRkKBpcNFICAAdhh6qJZtzD1ULsmH-C8fozoUWJEzpck4AD8lAMuzxqahO-a8yLgOY-GbN9TfmqpUlysbTAiSYrkIKBAfaoHn1UA5GspD6b/s180-c/character_egg.png";
+    }
   }
 }
-
+//次の経験値に
 function nextExpUP(num){
-  num = num + 100;
-  nextExp.textContent = num;
+  nextExpNum = nextExpNum + 100;
+  nextExp.textContent = nextExpNum;
 }
 
 const myAudio2 = document.getElementById("myAudio2");
@@ -118,3 +128,6 @@ function Sound2() {
   myAudio2.play();
   //https://soundeffect-lab.info/sound/anime/こちらがMP３の引用元です。確認済み
 }
+
+
+
