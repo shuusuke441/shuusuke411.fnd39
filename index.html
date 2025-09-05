@@ -5,47 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     
-    
     <title>ToDo育成アプリ</title>
     
 </head>
 <body>
     <div class="contener">
-    <h1>ToDo育成アプリ</h1>
-    <div id="pictu-area">
-    <div style="display: flex; justify-content: center; align-items: start; gap: 0 10px;"> 
-        <div style="position: relative; margin: 0 0px 30px 20px; padding: .8em 1em; border-radius: 40px; background-color: #c2e4ff; border: solid 2px #000000;">
-            <span style="position: absolute; left: 50%; width: 13px; height: 30px; color: #ffffff00; background-color: #000000; clip-path: polygon(0% 50%, 100% 50%, 50% 100%); bottom: -15px;"></span>
-              僕は、タスマだよ!<br>タスクをこなすのが大好きなんだ。<br>タスクを完了するといいことあるかも！？
-            <span style="position: absolute; left: 50%; width: 13px; height: 30px; color: #ffffff00; background-color: #c2e4ff; clip-path: polygon(0% 50%, 100% 50%, 50% 100%); bottom: -10px;"></span>
+        <h1>ToDo育成アプリ</h1>
+        <div id="pictu-area">
+            <div id="styleitem"> 
+                <div id="styleedge">
+                    <span id="stylechar"></span>
+                         僕は、タスマだよ!<br>タスクをこなすのが大好きなんだ。<br>タスクを完了するといいことあるかも！？
+                    <span id="styleback"></span>
+                </div> 
+            </div>
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVE8g58at6gfhiVSxRustgHDG4hwQVh6JFEcRkKBpcNFICAAdhh6qJZtzD1ULsmH-C8fozoUWJEzpck4AD8lAMuzxqahO-a8yLgOY-GbN9TfmqpUlysbTAiSYrkIKBAfaoHn1UA5GspD6b/s180-c/character_egg.png" id="character">
+                <br><div id="exp_bar" >
+                        <div id="exp_fill"></div>
+                    </div> 
+                <p>経験値: <span id="exp">0</span> / <span id="nextExp">100</span></p><p>レベル：<span id="level">1</span></p><audio id="myAudio2" src="男衆「イエーイ！」.mp3"></audio>
         </div> 
-    </div>
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVE8g58at6gfhiVSxRustgHDG4hwQVh6JFEcRkKBpcNFICAAdhh6qJZtzD1ULsmH-C8fozoUWJEzpck4AD8lAMuzxqahO-a8yLgOY-GbN9TfmqpUlysbTAiSYrkIKBAfaoHn1UA5GspD6b/s180-c/character_egg.png" id="character">
-        <br><div id="exp_bar" >
-            <div id="exp_fill"></div>
-        </div> 
-        <p>経験値: <span id="exp">0</span> / <span id="nextExp">100</span></p><p>レベル：<span id="level">1</span></p><audio id="myAudio2" src="男衆「イエーイ！」.mp3"></audio>
-    </div>    
+
         <div class="task">
-        <h5 id="name">タスク(必須)</h5>
-
-        <input type="text" id="taskInput" placeholder="タスクを入力して！"/>
-        <br><label>タスク完了期限:</label><input type="datetime-local" id="tasklimit"/>
-        <br><button id="addTaskBtn">タスクを追加</button>
-
-        <div>
-            <button id="rulettoBtn" onclick="Sound1()">タスクルーレットスタート</button>
-            <audio id="myAudio" src="ジャジャーン.mp3"></audio>
+            <h5 id="name">タスク(必須)</h5>
+            <input type="text" id="taskInput" placeholder="タスクを入力して！"/>
+            <br><label>タスク完了期限:</label><input type="datetime-local" id="tasklimit"/>
+            <br><button id="addTaskBtn">タスクを追加</button>
+            <div>
+                <button id="rulettoBtn" onclick="Sound1()">タスクルーレットスタート</button>
+                <audio id="myAudio" src="ジャジャーン.mp3"></audio>
             <p id="selecttask">選ばれたタスク：なし</p>
+            <!-- <div id="backcommand"></div> -->
+            </div>
         </div>
-
-    </div>
-    <div class="listCont">
-
-        <label>未完了タスク</label><ul id="taskList"></ul>
-        <label>完了したタスク</label><ul id="taskfinList"></ul>
         
-    </div>
+        <div class="listCont">
+            <label>未完了タスク</label><ul id="taskList"></ul>
+            <label>完了したタスク</label><ul id="taskfinList"></ul>
+        </div>
 
     </div>
    <script src="script.js"></script>
