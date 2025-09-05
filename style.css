@@ -10,6 +10,7 @@ body{
     padding: auto;
     font-size: larger;
 
+
 }
 
 input[type="text"]{
@@ -99,19 +100,22 @@ meter{
 }
 
 #exp_bar{
-    padding: 5px;
+    width: 90%;
+    height: 20px;
     overflow: hidden;
-    background-color: aqua;
-    margin: 20px 0;
+    background-color:#ccc;
+    margin: 10px 10px;
     border-radius: 10px;
+    position: relative;
+
 }
 
 #exp_fill{
-
-    background-color: rgb(178, 180, 180);
-    width: 100%;
-    height: 20px;
+    width: 0%;
+    height: 100%;
     border-radius: 10px;
+    background-color:aquamarine;
+    position: absolute;
 }
 
 #pictu-area{ 
@@ -123,3 +127,49 @@ meter{
   justify-content: center;
 }
 
+#styleitem{
+    display: flex;
+    justify-content: center; 
+    align-items: start; 
+    gap: 0 10px;
+}
+
+#styleedge{
+    position: relative; 
+    margin: 0 0px 30px 20px; 
+    padding: .8em 1em; 
+    border-radius: 40px; 
+    background-color: #c2e4ff; 
+    border: solid 2px #000000;
+}
+#stylechar{
+    position: absolute; 
+    left: 50%; 
+    width: 13px; 
+    height: 30px; 
+    color: #ffffff00; 
+    background-color: #000000; 
+    clip-path: polygon(0% 50%, 100% 50%, 50% 100%);
+    bottom: -15px;
+}
+#styleback{
+    position: absolute; 
+    left: 50%; 
+    width: 13px; 
+    height: 30px; 
+    color: #ffffff00; 
+    background-color: #c2e4ff; 
+    clip-path: polygon(0% 50%, 100% 50%, 50% 100%); 
+    bottom: -10px;
+}
+#backcommand{
+    margin: 0 auto;
+    width: 100px;
+    height: 10px;
+    background-color:beige;
+    border-radius: 10px ;
+    padding-bottom: 20px;
+}
+/* #backcommand:hover{
+    background-color: blue;
+} */
