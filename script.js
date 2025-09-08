@@ -1,166 +1,240 @@
-
 'use strict';
 
-const taskInput = document.getElementById("taskInput");
-const tasklimit = document.getElementById("tasklimit")
-const addTaskBtn = document.getElementById("addTaskBtn");
-const taskList = document.getElementById("taskList");
-const taskfinList = document.getElementById("taskfinList");
-const rulettoBtn = document.getElementById("rulettoBtn");
-const selecttask = document.getElementById("selecttask");
-const character = document.getElementById("character");
+// DOM
+const dom = {
+  taskInput: document.getElementById("taskInput"),
+  taskLimit: document.getElementById("tasklimit"),
+  addTaskBtn: document.getElementById("addTaskBtn"),
+  taskList: document.getElementById("taskList"),
+  taskFinList: document.getElementById("taskfinList"),
+  rulettoBtn: document.getElementById("rulettoBtn"),
+  selectTask: document.getElementById("selecttask"),
+  character: document.getElementById("character"),
+  //追加機能宣言
+  myAudio: document.getElementById("myAudio"),
+  myAudio2: document.getElementById("myAudio2"),
+  level: document.getElementById("level"),
+  exp: document.getElementById("exp"),
+  nextExp: document.getElementById("nextExp"),
+  expFill: document.getElementById("exp_fill"),
+  expBar: document.getElementById("exp_bar")
+};
+
+// ゲーム用データ
 let expNum = 0;
 let levelNum = 1;
 let nextExpNum = 100;
-let expUpNum = 0;
 
+function createTaskElement(taskText, limitDay) {
+  const li = document.createElement("li");
+  li.textContent = taskText;
 
-let tasks = [];
-addTaskBtn.addEventListener("click", function() {
-  const taskText = taskInput.value.trim();
-  const limitDay = tasklimit.value;
-    if(taskText === "") {
-      return alert("正しく入力できていません. タスクを入力してください！");
+  const createTime = new Date();
+  const addTime = document.createElement("small");
+  addTime.textContent = `作成日時: ${createTime.toLocaleString()}`;
+  li.appendChild(addTime);
+
+  const limitTime = document.createElement("small");
+  if (limitDay) {
+    const now = new Date();
+    const deadline = new Date(limitDay);
+    const diffHours = (deadline - now) / (1000 * 60 * 60); // ミリ秒→時間
+
+    if (diffHours <= 24 && diffHours > 0) {
+      limitTime.classList.add("due-soon");
     }
+  }
 
-    const li =document.createElement("li");
-    li.textContent = taskText;
 
-    //作成日時の追加
-    const createtime = new Date();
-    console.log(createtime);
-    const addTime = document.createElement("small");
-    addTime.textContent = `作成日時:
-     ${createtime.toLocaleString()}`;
-    li.appendChild(addTime);
 
-    //削除日時の追加
-    const limittime = document.createElement("small");
-    limittime.textContent = limitDay ? ` 期限: ${new Date(limitDay).toLocaleString()}` : ' 期限: なし';
-    li.appendChild(limittime);
+  limitTime.textContent = limitDay
+    ? ` 期限: ${new Date(limitDay).toLocaleString()}`
+    : ' 期限: なし';
+  li.appendChild(limitTime);
 
-     //完了ボタン
-    const bttn = document.createElement("button");
-    bttn.textContent = "完了";
-    bttn.addEventListener("click", function() {
-    li.classList.add("done");
-    taskList.removeChild(li);
-    taskfinList.appendChild(li);
-    li.removeChild(bttn);
-    levelUp(expNum);
-    expUpNum = expUpNum + (100 / (levelNum * 10));
-    expUp();
-    });
-  
-  
-  
-  //削除ボタン
-  const debttn = document.createElement("button");
-  debttn.textContent = "削除";
-  debttn.addEventListener("click", function(){
+  const completeBtn = document.createElement("button");
+  completeBtn.textContent = "完了";
+  completeBtn.addEventListener("click", () => completeTask(li, completeBtn));
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "削除";
+  deleteBtn.addEventListener("click", () =>{ 
     li.remove();
+    saveToLocalStorage();
   });
-  
-  //liのリストにボタンを追加
-  li.appendChild(bttn);
-  li.appendChild(debttn);
-  //未完了リストにボタンを追加
-  taskList.appendChild(li);
+ 
+  li.appendChild(completeBtn);
+  li.appendChild(deleteBtn);
 
-  taskInput.value = "";
-});
-
-//ルーレット機能
-const myAudio = document.getElementById("myAudio");
-rulettoBtn.addEventListener("click", Sound1);
-
-function Sound1() {
-  myAudio.play();
-  //https://soundeffect-lab.info/sound/anime/こちらがMP３の引用元です。確認済み
+  return li;
 }
-rulettoBtn.addEventListener("click", function() {
-  const tasks = taskList.querySelectorAll("li");
-  if(tasks.length === 0) {
-    selecttask.textContent = "タスクが何もないよ！";
+
+function addTask() {
+  const taskText = dom.taskInput.value.trim();
+  const limitDay = dom.taskLimit.value;
+
+  if (taskText === "") {
+    alert("正しく入力できていません. タスクを入力してください！");
     return;
   }
-  const randomNum = Math.floor(Math.random() * tasks.length);
-  selecttask.textContent = `選ばれたタスクは：${tasks[randomNum].firstChild.textContent}`
-});
 
-//レベルアップ機能
-const level = document.getElementById("level");
-const exp = document.getElementById("exp");
-const nextExp = document.getElementById("nextExp");
-const exp_fill = document.getElementById("exp_fill");
-const exp_bar = document.getElementById("exp_bar");
+  const li = createTaskElement(taskText, limitDay);
+  dom.taskList.appendChild(li);
+   saveToLocalStorage();
 
-//レベルアップ
-function levelUp(num) {
-  expNum = expNum + 10;
-    exp.textContent = expNum;
-  if(num === nextExpNum) {
-    exp.textContent = 10;
-    expNum = 10;
-    levelNum = levelNum + 1;
-    level.textContent = levelNum;
-    nextExpUP();
-    Sound2();
-    //下記画像リンクはどれも同じサイトからのものになります。フリー画像で確認済みです。
-    if(levelNum >= 5) {
-      character.src= "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtzOSh5RtTHz515R23Yc7ROVvVaf91S5y5elKZYjnSAa0bGnfAUjs8Tqg_hQCx25m6iMCTb1eQyKJa_zacaS5z2CYM3ZxBW4wgIo_ISufy24nru8gtfbJSLbPcuWZt9bDBPT1hsk3GNXrU/s180-c/fantasy_dragon_wyvern.png";
-    }else if(levelNum >= 4) {
-      character.src= "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgo-AaAJdj7q1XzCREPSpedoeZt6_Wb1fvlc9pSJMzfgazTFqrY2wQTVH22m1y5-AsDFRQKpbka7xe44yuvsp1k6yHh9_8AmsRy9sn7QQ6zfaNwQHHHA-BPD1VQ-Hq11RzpAxreTuSIyNe4/s180-c/animal_hagewashi_hagetaka.png";
-    }else if(levelNum >= 3) {
-      character.src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhugpMvQYTwORyEPiv79itvDimBE-OuHSjbrU5BtnSRijly6_H0PfGEWNbWgKSenjBq8Y2IGNFUPs1bJ-Lba7dW_R2Avw8YbfuO3Y1QIz8UcMFXoWr-XvzHl2PxnpNbQlXvsn6oc7x4a89x/s180-c/eto_remake_tori.png";
-    }else if(levelNum >= 2) {
-      character.src = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2C8RelIhXK1JMdJe3cgGAVdrShe-MXKcW3UV-8NyQmmpFQ4isibp212rK7ATvJq3KhAq28QmMnmOjxoyW1sKsXYe5BE_g6K7UP5vlRoEQvkzyW3vWIFDyj_LddBa90Qp_0y1cMk3h-kIn/s400/hiyoko_baby.png";
-    }else {
-      character.src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVE8g58at6gfhiVSxRustgHDG4hwQVh6JFEcRkKBpcNFICAAdhh6qJZtzD1ULsmH-C8fozoUWJEzpck4AD8lAMuzxqahO-a8yLgOY-GbN9TfmqpUlysbTAiSYrkIKBAfaoHn1UA5GspD6b/s180-c/character_egg.png";
+  dom.taskInput.value = "";
+}
+
+function completeTask(li, completeBtn) {
+  li.classList.add("done");
+  dom.taskList.removeChild(li);
+  dom.taskFinList.appendChild(li);
+  li.removeChild(completeBtn);
+  gainExp(10); // 経験値獲得
+  saveToLocalStorage();
+}
+
+function gainExp(amount) {
+  expNum += amount;
+  dom.exp.textContent = expNum;
+  updateExpBar();
+
+  if (expNum >= nextExpNum) {
+    levelUp();
+  }
+  saveToLocalStorage();
+}
+
+function levelUp() {
+  expNum = expNum - nextExpNum;
+  levelNum++;
+  nextExpNum += 100;
+
+  dom.level.textContent = levelNum;
+  dom.exp.textContent = expNum;
+  dom.nextExp.textContent = nextExpNum;
+
+  updateExpBar();
+  dom.myAudio2.play();
+  updateCharacterImage();
+}
+
+function updateExpBar() {
+  const percent = (expNum / nextExpNum) * 100;
+  dom.expFill.style.width = `${percent}%`;
+}
+
+function updateCharacterImage() {
+  let imageUrl = "";
+  if (levelNum >= 10) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjkC6ttflvux0pShojUbjbkme82R7a943avGBeJZf5ZVl9RMSSP5TH8siaiYPsYpyNCGzSmlR0TwHKFjELx1GI6W24Yi6fVCJs2z49zAYbG7vkFHp3xvX49L1nAxkgzkyup1v8gkiekct7w/s180-c/shinwa_zeus.png";
+  }else if (levelNum >= 5) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtzOSh5RtTHz515R23Yc7ROVvVaf91S5y5elKZYjnSAa0bGnfAUjs8Tqg_hQCx25m6iMCTb1eQyKJa_zacaS5z2CYM3ZxBW4wgIo_ISufy24nru8gtfbJSLbPcuWZt9bDBPT1hsk3GNXrU/s180-c/fantasy_dragon_wyvern.png";
+  } else if (levelNum >= 4) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgo-AaAJdj7q1XzCREPSpedoeZt6_Wb1fvlc9pSJMzfgazTFqrY2wQTVH22m1y5-AsDFRQKpbka7xe44yuvsp1k6yHh9_8AmsRy9sn7QQ6zfaNwQHHHA-BPD1VQ-Hq11RzpAxreTuSIyNe4/s180-c/animal_hagewashi_hagetaka.png";
+  } else if (levelNum >= 3) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIo7XmVdDa6pFYOkrGQ4dF8eoJIx-PisC26ZLF1FBz-XnhXyU3cSHO48K4Li4b7_J7mmE72Y4ywSifjAgpKjdyAaZdPcTqE-mV1wlc7XRta5zJhBgow_QKZX4QkTkJnI-S_JvYd26beKQI/s180-c/character_karaage.png";
+  } else if (levelNum >= 2) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhoo1K7MPUKW-dzDxsRKYw-9ZUgu6PCs7u-4v9Mj8gMau7N1ewfC16IusZT9U-qBnTR2u_rI_BCLEc9-sVV0M32e-ABz2dPN2tKBMu26ZbAr5dahgTmCvlz5LwpGrU4SSuID6Ns7k6kQytZ/s180-c/bird_maruitori.png";
+  } else {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjotLYgn4pahnuMnKU_CzFs90KeVd5MduGBGl-0rfcmdG5XexoSb3jEZsoOhCnF2qgI3V_LpDs90dJz655MIrXc9ZuiHmK8L_lsAZbprEAMOxLV6PO2UoZbvgmliJzYPYWyYJ4gmWtcWLA/s180-c/character_humpty_dumpty.png";
+  }
+
+  dom.character.src = imageUrl;
+}
+
+// タスクルーレット機能
+function pickRandomTask() {
+  const tasks = dom.taskList.querySelectorAll("li");
+  if (tasks.length === 0) {
+    dom.selectTask.textContent = "タスクが何もないよ！";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * tasks.length);
+  dom.selectTask.textContent = `選ばれたタスクは：${tasks[randomIndex].firstChild.textContent}`;
+  dom.myAudio.play();
+}
+
+function saveToLocalStorage() {
+  const tasks = [];
+
+  dom.taskList.querySelectorAll("li").forEach(li => {
+    tasks.push(taskToObject(li, false));
+  });
+
+  dom.taskFinList.querySelectorAll("li").forEach(li => {
+    tasks.push(taskToObject(li, true));
+  });
+
+  const saveData = {
+    tasks,
+    progress: {
+      expNum,
+      levelNum,
+      nextExpNum
     }
-  }
-}
-//次の経験値に
-function nextExpUP() {
-  nextExpNum = nextExpNum + 100;
-  nextExp.textContent = nextExpNum;
+  };
+
+  localStorage.setItem("taskGameData", JSON.stringify(saveData));
 }
 
-const myAudio2 = document.getElementById("myAudio2");
-function Sound2() {
-  myAudio2.play();
-  //https://soundeffect-lab.info/sound/anime/こちらがMP３の引用元です。確認済み
+function taskToObject(li, done) {
+  const text = li.firstChild.textContent.trim();
+  const timeText = li.querySelectorAll("small")[0].textContent.replace("作成日時: ", "");
+  const limitText = li.querySelectorAll("small")[1].textContent.replace(" 期限: ", "");
+
+  return {
+    text,
+    created: new Date(timeText).toISOString(),
+    limit: limitText === 'なし' ? "" : new Date(limitText).toISOString(),
+    done
+  };
 }
 
-//経験値ゲージ機能
-const expUp = function() {
-  if(expNum === 10){
-    expUpNum = 10;
-  }
-  exp_fill.style.width = expUpNum +"%";
+function loadFromLocalStorage() {
+  const saved = localStorage.getItem("taskGameData");
+  if (!saved) return;
+
+  const data = JSON.parse(saved);
+
+  dom.taskList.innerHTML = "";
+  dom.taskFinList.innerHTML = "";
+
+  data.tasks.forEach(task => {
+    const li = createTaskElement(task.text, task.limit);
+    if (task.done) {
+      li.classList.add("done");
+      dom.taskFinList.appendChild(li);
+
+      const completeBtn = li.querySelector("button");
+      if (completeBtn) completeBtn.remove();
+    } else {
+      dom.taskList.appendChild(li);
+    }
+
+    const smalls = li.querySelectorAll("small");
+    if (task.created) smalls[0].textContent = `作成日時: ${new Date(task.created).toLocaleString()}`;
+    if (task.limit) smalls[1].textContent = ` 期限: ${new Date(task.limit).toLocaleString()}`;
+    else smalls[1].textContent = ` 期限: なし`;
+  });
+
+  expNum = data.progress.expNum || 0;
+  levelNum = data.progress.levelNum || 1;
+  nextExpNum = data.progress.nextExpNum || 100;
+
+  dom.exp.textContent = expNum;
+  dom.level.textContent = levelNum;
+  dom.nextExp.textContent = nextExpNum;
+  updateExpBar();
+  updateCharacterImage();
 }
 
-
-
-//発表用裏設定
-// const backcommand = document.getElementById("backcommand");
-// const command = document.createElement("button");
-// backcommand.textContent = "裏コマンド";
-// backcommand.addEventListener("click", backCom);
-
-// function backCom(){
-//   while( document.querySelectorAll("ul li").length <= 20){
-//     console.log("1");
-//     taskInput.value = "タスク";
-//     li.textContent = taskText;
-//     bttn.textContent = "完了";
-//     li.classList.add("done");
-//     taskfinList.appendChild(li);
-//     li.appendChild(bttn);
-//   //未完了リストにボタンを追加
-//   taskList.appendChild(li);
-//   }
-// }
-
+// イベントリスナー
+dom.addTaskBtn.addEventListener("click", addTask);
+dom.rulettoBtn.addEventListener("click", pickRandomTask);
+window.addEventListener("load", () => {
+  loadFromLocalStorage();
+});
 
 
