@@ -170,6 +170,13 @@ meter{
     border-radius: 10px ;
     padding-bottom: 20px;
 }
-/* #backcommand:hover{
-    background-color: blue;
-} */
+.due-soon {
+  color: red;
+  font-weight: bold;
+}
+
+#mainArea{
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
