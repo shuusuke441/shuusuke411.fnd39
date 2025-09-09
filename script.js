@@ -128,7 +128,17 @@ function updateExpBar() {
 
 function updateCharacterImage() {
   let imageUrl = "";
-  if (levelNum >= 10) {
+  if(levelNum >= 50) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2E5atK6bGp77ov-KRNgWDRURKS55fk2nf_SuUUSqcrbjDjVFY4DWzMQHswTOZmWrxW5XlGQGqcXePqwgN-kRlw58N4i_WxrIXZrPBkKFM4fFF2Vewx2ywqEf4ZVJqql2sfZ9o-YMeUE0/s180-c/character_cthulhu_azathoth.png";
+  }else if(levelNum >= 40) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiREcvw5LX0HlzvqRSzOgdN8Awt7IqNyObkBkkLRhPCT7TyhPwZiesw3RqoocqGizKwH_nfT_LsyBKdNa4w4uoA7M4qhh82uB4-Fk1zBQhpNjrRITUJMrt_Cf-Pw_Mjzb4pOuH3q5sZ4XY/s180-c/character_cthulhu_hastur.png";
+  }else if(levelNum >= 30) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7oZJuQmcY_6Dob8m1HPGAq5u6VRMpDMhE7AHi1ipom3x1Rnm2AUzHVfnzoZ-7UDdpM83hIxNZBvSYBai1aHYTDjAkdL_m1eXBB9_5nG_XZdIXB-t4nuYfBWbdn26mLd6NtIWd_jp3lpM/s180-c/omen_syoujou.png";
+  }else if(levelNum >= 20) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXSyACLNaLNBocAQF_jxZ2KZhUE4-Y4aXMX6K9Ger02bjy4AZjb5UeRl2NeUfXlK-jFOC4PC21Ucj4QPwg0SB2C2Btp1i5C-Rgt5aj_-Jf2MvLkbome4YQ31g4T5VAm1qaAnDVD4Lzc4I/s180-c/fantasy_peryton.png";
+  }else if(levelNum >= 15) {
+    imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhazAzZjjJlfRp6CPsFUobmWrNFzNFFyBYU6TjZp6HEgdMmk2L47SfZbPpNk6R4ejY3JVG65EfrzvtvGTYVOZe4-PlvWgRMU2ImXXKV17vMdHFoQonmLQTDWQ03z90j9i_GR3KMLsGpvJOc/s180-c/golden_egg.png";
+  }else if (levelNum >= 10) {
     imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjkC6ttflvux0pShojUbjbkme82R7a943avGBeJZf5ZVl9RMSSP5TH8siaiYPsYpyNCGzSmlR0TwHKFjELx1GI6W24Yi6fVCJs2z49zAYbG7vkFHp3xvX49L1nAxkgzkyup1v8gkiekct7w/s180-c/shinwa_zeus.png";
   }else if (levelNum >= 5) {
     imageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtzOSh5RtTHz515R23Yc7ROVvVaf91S5y5elKZYjnSAa0bGnfAUjs8Tqg_hQCx25m6iMCTb1eQyKJa_zacaS5z2CYM3ZxBW4wgIo_ISufy24nru8gtfbJSLbPcuWZt9bDBPT1hsk3GNXrU/s180-c/fantasy_dragon_wyvern.png";
