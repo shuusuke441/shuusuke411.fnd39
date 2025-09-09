@@ -1,6 +1,6 @@
 'use strict';
 
-// DOM
+// DOMの置換
 const dom = {
   taskInput: document.getElementById("taskInput"),
   taskLimit: document.getElementById("tasklimit"),
@@ -20,7 +20,7 @@ const dom = {
   expBar: document.getElementById("exp_bar")
 };
 
-// ゲーム用データ
+// 育成ゲーム要素用データ
 let expNum = 0;
 let levelNum = 1;
 let nextExpNum = 100;
@@ -38,7 +38,7 @@ function createTaskElement(taskText, limitDay) {
   if (limitDay) {
     const now = new Date();
     const deadline = new Date(limitDay);
-    const diffHours = (deadline - now) / (1000 * 60 * 60); // ミリ秒→時間
+    const diffHours = (deadline - now) / (1000 * 60 * 60); 
 
     if (diffHours <= 24 && diffHours > 0) {
       limitTime.classList.add("due-soon");
@@ -69,7 +69,8 @@ function createTaskElement(taskText, limitDay) {
   return li;
 }
 
-function addTask() {
+function addTask(event) {
+ 
   const taskText = dom.taskInput.value.trim();
   const limitDay = dom.taskLimit.value;
 
@@ -83,7 +84,8 @@ function addTask() {
    saveToLocalStorage();
 
   dom.taskInput.value = "";
-}
+  }
+
 
 function completeTask(li, completeBtn) {
   li.classList.add("done");
@@ -218,7 +220,8 @@ function loadFromLocalStorage() {
     if (task.limit) smalls[1].textContent = ` 期限: ${new Date(task.limit).toLocaleString()}`;
     else smalls[1].textContent = ` 期限: なし`;
   });
-
+    //||演算子（論理OR）は左側の値が**falsy**（偽値、false, 0, "", null, undefined, NaNなど）の場合に右側の値を返します。
+    // 一方、??演算子（Nullish coalescing）は左側の値が**nullまたはundefined**の場合にのみ右側の値を返します。
   expNum = data.progress.expNum || 0;
   levelNum = data.progress.levelNum || 1;
   nextExpNum = data.progress.nextExpNum || 100;
